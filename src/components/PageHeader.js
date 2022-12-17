@@ -6,7 +6,7 @@ import React from 'react'
  
 const { Header } = Layout
  
-function PageHeader({ loggedIn, signoutOnClick, signinOnSuccess, favoriteItems }) {
+function PageHeader({ loggedIn, signoutOnClick, signinOnSuccess, favoriteItems, setUserId}) {
   return (
     <Header>
       <Row justify='space-between'>
@@ -17,7 +17,7 @@ function PageHeader({ loggedIn, signoutOnClick, signinOnSuccess, favoriteItems }
           {loggedIn && <Button shape="round" onClick={signoutOnClick}>Logout</Button>}
           {!loggedIn && (
             <>
-              <Login onSuccess={signinOnSuccess} />
+              <Login onSuccess={signinOnSuccess} setUserId={setUserId}/>
               <Register />
             </>
           )}

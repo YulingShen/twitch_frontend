@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { login } from '../utils'
  
-function Login({ onSuccess }) {
+function Login({ onSuccess, setUserId }) {
   const [displayModal, setDisplayModal] = useState(false)
  
   const handleCancel = () => {
@@ -18,8 +18,9 @@ function Login({ onSuccess }) {
     login(data)
       .then((data) => {
         setDisplayModal(false)
+        setUserId(data.user_id)
         message.success(`Welcome back, ${data.name}`)
-        onSuccess()
+        onSuccess(data.user_id)
       }).catch((err) => {
         message.error(err.message)
       })

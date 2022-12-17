@@ -17,6 +17,7 @@ function App() {
     STREAM: [],
     CLIP: [],
   });
+  const [userId, setUserId] = useState("")
 
   useEffect(() => {
     getTopGames()
@@ -37,15 +38,15 @@ function App() {
   //   })
   // }, []);
 
-  useEffect(() => {
-    var state = doesHttpOnlyCookieExist('JSESSIONID')
-    console.log(state)
-    if (state == true){
-      setLoggedIn(true)
-      return
-    }
-    //message.info('not loggedin')
-  }, []);
+  // useEffect(() => {
+  //   var state = doesHttpOnlyCookieExist('JSESSIONID')
+  //   console.log(state)
+  //   if (state == true){
+  //     setLoggedIn(true)
+  //     return
+  //   }
+  //   //message.info('not loggedin')
+  // }, []);
 
   //try to read cookie
   function doesHttpOnlyCookieExist(cookiename) {
@@ -58,9 +59,9 @@ function App() {
     return document.cookie.indexOf(cookiename + '=') == -1;
   }
  
-  const signinOnSuccess = () => {
+  const signinOnSuccess = (id) => {
     setLoggedIn(true);
-    getFavoriteItem().then((data) => {
+    getFavoriteItem(id).then((data) => {
       setFavoriteItems(data);
     });
   }
@@ -105,7 +106,7 @@ function App() {
 
   const onGameSelect = ({ key }) => {
     if (key === "recommendation") {
-      getRecommendations().then((data) => {
+      getRecommendations(userId).then((data) => {
         setResources(data);
       });
       return;
@@ -117,7 +118,8 @@ function App() {
   };
 
   const favoriteOnChange = () => {
-    getFavoriteItem()
+    console.log(userId)
+    getFavoriteItem(userId)
       .then((data) => {
         setFavoriteItems(data);
       })
@@ -134,6 +136,7 @@ function App() {
           signoutOnClick={signoutOnClick}
           signinOnSuccess={signinOnSuccess}
           favoriteItems={favoriteItems}
+          setUserId={setUserId}
         />
       </Header>
       <Layout>
@@ -161,6 +164,7 @@ function App() {
               loggedIn={loggedIn}
               favoriteOnChange={favoriteOnChange}
               favoriteItems={favoriteItems}
+              userId={userId}
             />
           </Content>
         </Layout>

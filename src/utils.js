@@ -94,15 +94,17 @@ export const searchGameByName = (gameName) => {
 }
  
 const favoriteItemUrl = `${SERVER_ORIGIN}/favorite`;
+const getFavoriteItemUrl = `${SERVER_ORIGIN}/favorite?user_id=`;
+
  
-export const addFavoriteItem = (favItem) => {
+export const addFavoriteItem = (favItem, userId) => {
   return fetch(favoriteItemUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-    body: JSON.stringify({ favorite: favItem })
+    body: JSON.stringify({ favorite: favItem, user_id: userId })
   }).then((response) => {
     if (response.status !== 200) {
       throw Error('Fail to add favorite item');
@@ -110,14 +112,14 @@ export const addFavoriteItem = (favItem) => {
   })
 }
  
-export const deleteFavoriteItem = (favItem) => {
+export const deleteFavoriteItem = (favItem, userId) => {
   return fetch(favoriteItemUrl, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
     credentials: 'include',
-    body: JSON.stringify({ favorite: favItem })
+    body: JSON.stringify({ favorite: favItem, user_id: userId })
   }).then((response) => {
     if (response.status !== 200) {
       throw Error('Fail to delete favorite item');
@@ -125,8 +127,8 @@ export const deleteFavoriteItem = (favItem) => {
   })
 }
  
-export const getFavoriteItem = () => {
-  return fetch(favoriteItemUrl, {
+export const getFavoriteItem = (userId) => {
+  return fetch(`${getFavoriteItemUrl}${userId}`, {
     credentials: 'include',
   }).then((response) => {
     if (response.status !== 200) {
@@ -137,10 +139,10 @@ export const getFavoriteItem = () => {
   })
 }
  
-const getRecommendedItemsUrl = `${SERVER_ORIGIN}/recommendation`;
+const getRecommendedItemsUrl = `${SERVER_ORIGIN}/recommendation?user_id=`;
  
-export const getRecommendations = () => {
-  return fetch(getRecommendedItemsUrl, {
+export const getRecommendations = (userId) => {
+  return fetch(`${getRecommendedItemsUrl}${userId}`, {
     credentials: 'include',
   }).then((response) => {
     if (response.status !== 200) {

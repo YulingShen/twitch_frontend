@@ -16,14 +16,14 @@ const processUrl = (url) => url
   .replace('{height}', '252')
   .replace('{width}', '480');
  
-const renderCardTitle = (item, loggedIn, favs = [], favOnChange) => {
+const renderCardTitle = (item, loggedIn, favs = [], favOnChange, userId) => {
   const title = `${item.broadcaster_name} - ${item.title}`;
  
   const isFav = favs.find((fav) => fav.id === item.id);
  
   const favOnClick = () => {
     if (isFav) {
-      deleteFavoriteItem(item).then(() => {
+      deleteFavoriteItem(item, userId).then(() => {
         favOnChange();
       }).catch(err => {
         message.error(err.message)
@@ -32,7 +32,7 @@ const renderCardTitle = (item, loggedIn, favs = [], favOnChange) => {
       return;
     }
  
-    addFavoriteItem(item).then(() => {
+    addFavoriteItem(item, userId).then(() => {
       favOnChange();
     }).catch(err => {
       message.error(err.message)
@@ -56,7 +56,7 @@ const renderCardTitle = (item, loggedIn, favs = [], favOnChange) => {
   )
 }
  
-const renderCardGrid = (data, loggedIn, favs, favOnChange) => {
+const renderCardGrid = (data, loggedIn, favs, favOnChange, userId) => {
   return (
     <List
       grid={{
@@ -70,7 +70,7 @@ const renderCardGrid = (data, loggedIn, favs, favOnChange) => {
       renderItem={item => (
         <List.Item style={{ marginRight: '20px' }}>
           <Card
-            title={renderCardTitle(item, loggedIn, favs, favOnChange)}
+            title={renderCardTitle(item, loggedIn, favs, favOnChange, userId)}
           >
  			<a
               href={item.url}
@@ -91,7 +91,7 @@ const renderCardGrid = (data, loggedIn, favs, favOnChange) => {
   )
 }
  
-const Home = ({ resources, loggedIn, favoriteItems, favoriteOnChange }) => {
+const Home = ({ resources, loggedIn, favoriteItems, favoriteOnChange, userId }) => {
   const { VIDEO, STREAM, CLIP } = resources;
   const { VIDEO: favVideos, STREAM: favStreams, CLIP: favClips } = favoriteItems;
  
@@ -100,13 +100,13 @@ const Home = ({ resources, loggedIn, favoriteItems, favoriteOnChange }) => {
       defaultActiveKey={tabKeys.Streams}
     >
       <TabPane tab="Streams" key={tabKeys.Streams} forceRender={true}>
-        {renderCardGrid(STREAM, loggedIn, favStreams, favoriteOnChange)}
+        {renderCardGrid(STREAM, loggedIn, favStreams, favoriteOnChange, userId)}
       </TabPane>
       <TabPane tab="Videos" key={tabKeys.Videos} forceRender={true}>
-        {renderCardGrid(VIDEO, loggedIn, favVideos, favoriteOnChange)}
+        {renderCardGrid(VIDEO, loggedIn, favVideos, favoriteOnChange, userId)}
       </TabPane>
       <TabPane tab="Clips" key={tabKeys.Clips} forceRender={true}>
-        {renderCardGrid(CLIP, loggedIn, favClips, favoriteOnChange)}
+        {renderCardGrid(CLIP, loggedIn, favClips, favoriteOnChange, userId)}
       </TabPane>
     </Tabs>
   );
