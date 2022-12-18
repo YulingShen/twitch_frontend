@@ -38,14 +38,14 @@ export const register = (data) => {
 const logoutUrl = `${SERVER_ORIGIN}/logout`;
  
 export const logout = () => {
-  return fetch(logoutUrl, {
-    method: 'POST',
-    credentials: 'include',
-  }).then((response) => {
-    if (response.status !== 200) {
-      throw Error('Fail to log out');
-    }
-  })
+  // return fetch(logoutUrl, {
+  //   method: 'POST',
+  //   credentials: 'include',
+  // }).then((response) => {
+  //   if (response.status !== 200) {
+  //     throw Error('Fail to log out');
+  //   }
+  // })
 }
  
 const topGamesUrl = `${SERVER_ORIGIN}/game`;
@@ -140,15 +140,28 @@ export const getFavoriteItem = (userId) => {
 }
  
 const getRecommendedItemsUrl = `${SERVER_ORIGIN}/recommendation?user_id=`;
+const getRecommendedItemsUrlNoUser = `${SERVER_ORIGIN}/recommendation`;
+
  
-export const getRecommendations = (userId) => {
-  return fetch(`${getRecommendedItemsUrl}${userId}`, {
+export const getRecommendations = (userId, loggedIn) => {
+  if (loggedIn){
+    return fetch(`${getRecommendedItemsUrl}${userId}`, {
+      credentials: 'include',
+    }).then((response) => {
+      if (response.status !== 200) {
+        throw Error('Fail to get recommended item');
+      }
+  
+      return response.json();
+    })
+  }
+  return fetch(getRecommendedItemsUrlNoUser, {
     credentials: 'include',
   }).then((response) => {
     if (response.status !== 200) {
       throw Error('Fail to get recommended item');
     }
- 
+
     return response.json();
   })
 }

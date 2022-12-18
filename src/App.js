@@ -106,7 +106,7 @@ function App() {
 
   const onGameSelect = ({ key }) => {
     if (key === "recommendation") {
-      getRecommendations(userId).then((data) => {
+      getRecommendations(userId, loggedIn).then((data) => {
         setResources(data);
       });
       return;
